@@ -1,0 +1,104 @@
+body {
+    font-family: 'Courier New', Courier, monospace; /* ハッカー風フォント */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #121212; /* サイバーパンク風の背景色 */
+    color: #00c2b2; /* テキスト色 */
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #1b1b1b; /* コンテナ背景色 */
+    padding: 20px;
+    border: 1px solid #00c2b2; /* 枠線 */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 194, 178, 0.3); /* ソフトシャドウ */
+    width: 60%;
+    max-width: 800px;
+    height: 450px;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #00c2b2; /* タイトルのテキスト色 */
+    text-shadow: 0 0 6px rgba(0, 194, 178, 0.6); /* わずかな光沢 */
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid #00c2b2; /* テキストエリアの境界線色 */
+    background-color: #262626; /* テキストエリアの背景色 */
+    border-radius: 4px;
+    resize: none;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace; /* コンソール風フォント */
+    color: #00c2b2; /* テキストエリアのテキスト色 */
+    box-sizing: border-box;
+}
+
+.user-input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.user-input input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #00c2b2; /* 入力フィールドの境界線色 */
+    background-color: #262626; /* 入力フィールドの背景色 */
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace; /* コンソール風フォント */
+    color: #00c2b2; /* 入力フィールドのテキスト色 */
+    box-sizing: border-box;
+}
+
+.button-wrapper {
+    display: flex;
+    gap: 10px; /* ボタン間のスペース */
+}
+
+button {
+    padding: 12px 30px;
+    background-color: #00c2b2; /* ボタン背景色 */
+    color: #1b1b1b;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace; /* コンソール風フォント */
+    text-transform: uppercase;
+    transition: background-color 0.3s, transform 0.2s; /* スムーズなアニメーション */
+}
+
+button:hover {
+    background-color: #009688; /* ボタンのホバーカラー */
+    transform: scale(1.02); /* ホバー時のスケーリング */
+}
+
+.result {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #00c2b2; /* 結果表示のテキスト色 */
+    height: 20px; /* エリアの高さを設定 */
+}
+
+.success {
+    color: #4CAF50; /* 成功メッセージの色 */
+}
+
+.fail {
+    color: #F44336; /* 失敗メッセージの色 */
+}

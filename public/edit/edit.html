@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像の管理ページ</title>
+</head>
+<body>
+    <h1>画像の管理ページ</h1>
+    <button id="listButton">ファイル一覧取得</button>
+    <ul id="fileList"></ul>
+    <button id="deleteSelectedButton">選択したファイルを削除</button>
+    <button id="deleteAllButton">すべて削除</button>
+    <p id="message"></p>
+
+    <script>
+        // ファイル一覧を取得
+        document.getElementById('listButton').addEventListener('click', getFiles);
+
+        // 選択したファイルを削除
+        document.getElementById('deleteSelectedButton').addEventListener('click', async function () {
+            const checkboxes = document.querySelectorAll('#fileList input[type="checkbox"]:checked');
+            if (checkboxes.length === 0) {
+                alert('削除するファイルを選択してください');
+                return;
+            }
+
+            const deletePromises = Array.from(checkboxes).map(async (checkbox) => {
+                const fileName = checkbox.value;
+                try {
+                    const response = await fetch('/delete-image', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ fileName })
+                    });
+
+                    return response.text();
+                } catch (error) {
+                    console.error(`Error deleting ${fileName}:`, error);
+                    return `${fileName}の削除エラー`;
+                }
+            });
+
+            try {
+                const results = await Promise.all(deletePromises);
+                document.getElementById('message').textContent = results.join(', ');
+            } catch (error) {
+                document.getElementById('message').textContent = '削除エラーが発生しました';
+                console.error('Error:', error);
+            }
+          
+            getFiles();
+        });
+
+        // すべてのファイルを削除
+        document.getElementById('deleteAllButton').addEventListener('click', async function () {
+            if (!confirm('本当にすべてのファイルを削除しますか？')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/delete-all-images', {
+                    method: 'DELETE'
+                });
+
+                const result = await response.text();
+                document.getElementById('message').textContent = result;
+            } catch (error) {
+                document.getElementById('message').textContent = '一括削除エラーが発生しました';
+                console.error('Error:', error);
+            }
+            
+            getFiles();
+        });
+      
+      
+      
+        async function getFiles() {
+          try {
+                const response = await fetch('/list-images');
+                const files = await response.json();
+
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = ''; // 一度クリア
+
+                files
+                    .filter(file => file.endsWith('.png')) // .pngファイルだけをフィルタリング
+                    .forEach(file => {
+                        const li = document.createElement('li');
+
+                        // チェックボックスの作成
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.value = file;
+                        li.appendChild(checkbox);
+
+                        // ファイル名テキストの作成
+                        li.appendChild(document.createTextNode(file + ' '));
+
+                        // 新しいウィンドウでファイルを開くリンクの作成
+                        const link = document.createElement('a');
+                        link.href = `/${file}`; // ファイルのURLにリンク
+                        link.textContent = '[開く]';
+                        link.target = '_blank'; // 新しいウィンドウで開く
+                        li.appendChild(link);
+
+                        fileList.appendChild(li);
+                    });
+          } catch (error) {
+                document.getElementById('message').textContent = 'ファイル一覧の取得エラーが発生しました';
+                console.error('Error:', error);
+          }
+        }
+    </script>
+</body>
+</html>
