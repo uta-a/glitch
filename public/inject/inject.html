@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ws Injection</title>
+    <!-- ファビコンの設定 -->
+    <link rel="icon" href="https://cdn.glitch.global/a256f0e6-9cbe-4c2e-8035-5c9ed452e6de/favicon.ico?v=1725194574069" type="image/x-icon">
+    <link rel="icon" href="https://cdn.glitch.global/a256f0e6-9cbe-4c2e-8035-5c9ed452e6de/favicon.ico?v=1725194574069" type="image/png">
+    
+    <!-- style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ws Injection</h1>
+
+        <!-- ユーザー選択用の入力ボックス -->
+        <div class="user-input">
+            <input type="text" id="user" placeholder="Enter User Name">
+        </div>
+        
+        <textarea id="textarea" placeholder="Enter your script here..." spellcheck="false"></textarea>
+        <!-- ボタンのラッパーを追加 -->
+        <div class="button-wrapper">
+            <button onclick="sendMessage()">SEND</button>
+            <button onclick="capture()">CAPTURE</button> <!-- CAPTUREボタンの追加 -->
+        </div>
+        <div id="result" class="result"></div> <!-- 結果表示エリア -->
+    </div>
+
+    <script src="script.js"></script>
+    <script src="capture.js"></script>
+</body>
+</html>

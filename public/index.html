@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像アップロードと削除</title>
+</head>
+<body>
+    <h1>画像アップロードと削除</h1>
+    <input type="file" id="fileInput" accept="image/*">
+    <button id="uploadButton">アップロード</button>
+    <button id="deleteButton">削除</button>
+    <input type="text" id="fileNameInput" placeholder="削除するファイル名">
+    <button id="listButton">ファイル一覧取得</button>
+    <p id="message"></p>
+    <ul id="fileList"></ul>
+
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', async function () {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('ファイルを選択してください');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onloadend = async function () {
+                const dataUrl = reader.result;
+
+                try {
+                    const response = await fetch('/upload-image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ dataUrl })
+                    });
+
+                    const result = await response.text();
+                    document.getElementById('message').textContent = result;
+                } catch (error) {
+                    document.getElementById('message').textContent = 'エラーが発生しました';
+                    console.error('Error:', error);
+                }
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('deleteButton').addEventListener('click', async function () {
+            const fileName = document.getElementById('fileNameInput').value;
+
+            if (!fileName) {
+                alert('削除するファイル名を入力してください');
+                return;
+            }
+
+            try {
+                const response = await fetch('/delete-image', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fileName })
+                });
+
+                const result = await response.text();
+                document.getElementById('message').textContent = result;
+            } catch (error) {
+                document.getElementById('message').textContent = '削除エラーが発生しました';
+                console.error('Error:', error);
+            }
+        });
+
+        document.getElementById('listButton').addEventListener('click', async function () {
+            try {
+                const response = await fetch('/list-images');
+                const files = await response.json();
+
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = ''; // 一度クリア
+
+                files.forEach(file => {
+                    const li = document.createElement('li');
+                    li.textContent = file;
+                    fileList.appendChild(li);
+                });
+            } catch (error) {
+                document.getElementById('message').textContent = 'ファイル一覧の取得エラーが発生しました';
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
